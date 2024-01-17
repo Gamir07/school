@@ -38,16 +38,33 @@ public class StudentController {
         return ResponseEntity.ok().build();
 
     }
+
     @GetMapping("/getStudentsByAge/{age}")
-    public ResponseEntity<Collection<Student>> getStudentsByAge(@PathVariable int age){
-        if (service.getAllStudentsByAge(age).isEmpty()){
+    public ResponseEntity<Collection<Student>> getStudentsByAge(@PathVariable int age) {
+        if (service.getAllStudentsByAge(age).isEmpty()) {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(service.getAllStudentsByAge(age));
+    }
+
+    @GetMapping("/getStudentsByAgeBetween")
+    public ResponseEntity<Collection<Student>> getStudentsByAgeBetween(@RequestParam int min,
+                                                                       @RequestParam int max) {
+        Collection<Student> studentsByAgeBetween = service.getStudentsByAgeBetween(min, max);
+        return ResponseEntity.ok(studentsByAgeBetween);
     }
 
     @GetMapping
     public Collection<Student> getAllStudents() {
         return service.getAllStudents();
     }
+
+    @GetMapping("/getStudentsByFaculty")
+    public ResponseEntity<Collection<Student>> getStudentsByFaculty(@RequestParam String name) {
+        if (service.getStudentsByFaculty(name).isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(service.getStudentsByFaculty(name));
+    }
+
 }

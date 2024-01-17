@@ -66,19 +66,40 @@ class FacultyServiceTest {
     }
 
     @Test
-    void getAllFacultiesByColor() {
-        List<Faculty> expectedList = List.of(FACULTY3);
+    void shouldFinsAllFacultiesByColor() {
+        Faculty expectedFaculty = FACULTY3;
         String COLOR = "green";
-        Mockito.when(repository.findByColor(COLOR)).thenReturn(expectedList);
-        assertIterableEquals(expectedList,out.getAllFacultiesByColor(COLOR));
-        Mockito.verify(repository, Mockito.times(1)).findByColor(COLOR);
+        Mockito.when(repository.findByColorIgnoreCase(COLOR)).thenReturn(expectedFaculty);
+        assertEquals(expectedFaculty,out.getFacultyByColor(COLOR));
+        Mockito.verify(repository, Mockito.times(1)).findByColorIgnoreCase(COLOR);
 
     }
-
     @Test
-    void getAllFaculties() {
+    void shouldFindAllFaculties() {
         Mockito.when(repository.findAll()).thenReturn(faculties);
         assertEquals(faculties,out.getAllFaculties());
         Mockito.verify(repository, Mockito.times(1)).findAll();
     }
+    @Test
+    void shouldFindFacultyByNameIgnoreCase() {
+        String facultyName = "ravenclaw";
+        Mockito.when(repository.findByNameIgnoreCase(facultyName)).thenReturn(FACULTY4);
+        assertEquals(FACULTY4,out.getFacultyByName(facultyName));
+        Mockito.verify(repository, Mockito.times(1)).findByNameIgnoreCase(facultyName);
+    }
+    @Test
+    void shouldFindFacultyByColorIgnoreCase() {
+        String facultyColor = "Yellow";
+        Mockito.when(repository.findByColorIgnoreCase(facultyColor)).thenReturn(FACULTY2);
+        assertEquals(FACULTY2,out.getFacultyByColor(facultyColor));
+        Mockito.verify(repository, Mockito.times(1)).findByColorIgnoreCase(facultyColor);
+    }
+    @Test
+    void shouldFindFacultyByStudentId() {
+        Long id = 3L;
+        Mockito.when(repository.findFacultyByStudentId(id)).thenReturn(FACULTY1);
+        assertEquals(FACULTY1,out.getFacultyByStudentId(id));
+        Mockito.verify(repository, Mockito.times(1)).findFacultyByStudentId(id);
+    }
+
 }

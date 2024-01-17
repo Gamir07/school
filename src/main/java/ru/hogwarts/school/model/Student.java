@@ -1,20 +1,32 @@
 package ru.hogwarts.school.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
-import lombok.experimental.FieldNameConstants;
 
-@NoArgsConstructor
-@AllArgsConstructor
+
 @Data
 @Entity
 public class Student {
+
     @Id
     @GeneratedValue
     private Long id;
+
     private String name;
     private int age;
+
+    public Student() {
+    }
+
+    public Student(Long id, String name, int age, Faculty faculty) {
+        this.id = id;
+        this.name = name;
+        this.age = age;
+        this.faculty = faculty;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "faculty_id")
+    private Faculty faculty;
 
 }
