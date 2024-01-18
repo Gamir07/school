@@ -1,5 +1,6 @@
 package ru.hogwarts.school.service;
 
+import org.checkerframework.checker.units.qual.N;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -8,6 +9,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.web.client.HttpClientErrorException;
+import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.repository.StudentRepository;
 
@@ -22,11 +24,14 @@ class StudentServiceTest {
 
     @Mock
     StudentRepository repository;
-
-    Student STUDENT1 = new Student(1L,"Andrew", 41);
-    Student STUDENT2 = new Student(2L,"Michael", 26);
-    Student STUDENT3 = new Student(3L,"Ana", 33);
-    Student STUDENT4 = new Student(4L,"Maria", 26);
+    Faculty FACULTY1 = new Faculty(1L,"Gryffindor", "red");
+    Faculty FACULTY2 = new Faculty(2L,"Hufflepuff", "yellow");
+    Faculty FACULTY3 = new Faculty(3L,"Slytherin", "green");
+    Faculty FACULTY4 = new Faculty(4L,"Ravenclaw", "blue");
+    Student STUDENT1 = new Student(1L,"Andrew", 41,FACULTY1);
+    Student STUDENT2 = new Student(2L,"Michael", 26,FACULTY2);
+    Student STUDENT3 = new Student(3L,"Ana", 33,FACULTY1);
+    Student STUDENT4 = new Student(4L,"Maria", 26,FACULTY4);
 
     List<Student> studentList;
 
@@ -66,7 +71,7 @@ class StudentServiceTest {
     }
 
     @Test
-    void getAllStudentsByAge() {
+    void shouldFindAllStudentsByAge() {
         List<Student> expectedStudentList = List.of(STUDENT2, STUDENT4);
         int AGE = 26;
         Mockito.when(repository.findByAge(AGE)).thenReturn(expectedStudentList);
@@ -80,4 +85,23 @@ class StudentServiceTest {
         assertEquals(studentList, out.getAllStudents());
         Mockito.verify(repository, Mockito.times(1)).findAll();
     }
+    @Test
+    void shouldFindStudentsByAgeBetween(){
+        int MIN = 25;
+        int MAX = 35;
+        List<Student> expectedList = List.of(STUDENT2,STUDENT3,STUDENT4);
+        Mockito.when(repository.findByAgeBetween(MIN,MAX)).thenReturn(expectedList);
+        assertIterableEquals(expectedList, out.getStudentsByAgeBetween(MIN,MAX));
+        Mockito.verify(repository,Mockito.times(1)).findByAgeBetween(MIN,MAX);
+    }
+    @Test
+    void shouldFindStudentsByFacultyName(){
+        String NAME = "Slytherin";
+        List<Student> expectedList = List.of(STUDENT3);
+        Mockito.when(repository.findStudentsByFaculty(NAME)).thenReturn(expectedList);
+        assertIterableEquals(expectedList, out.getStudentsByFaculty(NAME));
+        Mockito.verify(repository, Mockito.times(1)).findStudentsByFaculty(NAME);
+    }
+
+
 }

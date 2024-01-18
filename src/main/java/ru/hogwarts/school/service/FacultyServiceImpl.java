@@ -4,13 +4,14 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.hogwarts.school.exception.FacultyNotFoundException;
 import ru.hogwarts.school.model.Faculty;
+import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.repository.FacultyRepository;
 
 import java.util.Collection;
 
 @Service
 @AllArgsConstructor
-public class FacultyServiceImpl implements FacultyService{
+public class FacultyServiceImpl implements FacultyService {
 
     private FacultyRepository repository;
 
@@ -30,12 +31,19 @@ public class FacultyServiceImpl implements FacultyService{
         repository.deleteById(id);
     }
 
-    public Collection<Faculty> getAllFacultiesByColor(String color) {
-        return repository.findByColor(color);
+    public Faculty getFacultyByColor(String color) {
+        return repository.findByColorIgnoreCase(color);
     }
 
     public Collection<Faculty> getAllFaculties() {
         return repository.findAll();
+    }
+
+    public Faculty getFacultyByName(String name) {
+        return repository.findByNameIgnoreCase(name);
+    }
+    public Faculty getFacultyByStudentId(Long id){
+       return repository.findFacultyByStudentId(id);
     }
 
 }
