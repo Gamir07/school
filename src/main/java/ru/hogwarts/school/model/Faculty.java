@@ -21,6 +21,10 @@ public class Faculty {
     private String name;
     private String color;
 
+    @OneToMany(mappedBy = "faculty")
+    @JsonIgnore
+    private Collection<Student> studentList;
+
     public Faculty() {
     }
 
@@ -30,7 +34,4 @@ public class Faculty {
         this.color = color;
     }
 
-    @OneToMany(mappedBy = "faculty")
-    @JsonIgnore
-    private Collection<Student> studentList;
 }
