@@ -1,5 +1,6 @@
 package ru.hogwarts.school.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -22,12 +23,11 @@ public class Avatar {
     public Avatar() {
     }
 
-    public Avatar(Long id, String filepath, long fileSize, String mediaType, byte[] data, Student student) {
+    public Avatar(Long id, String filepath, long fileSize, String mediaType, Student student) {
         this.id = id;
         this.filePath = filepath;
         this.fileSize = fileSize;
         this.mediaType = mediaType;
-        this.data = data;
         this.student = student;
     }
 }

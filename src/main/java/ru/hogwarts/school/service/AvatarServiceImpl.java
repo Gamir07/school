@@ -33,7 +33,7 @@ public class AvatarServiceImpl implements AvatarService {
 
     public void uploadAvatar(Long studentId, MultipartFile avatarFile) throws IOException {
         Student student = service.getStudent(studentId);
-        Path filePath = Path.of(avatarsDir, student + "." + getExtensions(avatarFile.getOriginalFilename()));
+        Path filePath = Path.of(avatarsDir, studentId + student.getName() + "." + getExtensions(avatarFile.getOriginalFilename()));
         Files.createDirectories(filePath.getParent());
         Files.deleteIfExists(filePath);
         try (
@@ -53,20 +53,20 @@ public class AvatarServiceImpl implements AvatarService {
         avatarRepository.save(avatar);
     }
 
-    private byte[] generateDataForDB(Path filePath)throws IOException{
-        try(
-            InputStream is = Files.newInputStream(filePath);
-            BufferedInputStream bis = new BufferedInputStream(is,1024);
-            ByteArrayOutputStream baos = new ByteArrayOutputStream()){
+    private byte[] generateDataForDB(Path filePath) throws IOException {
+        try (
+                InputStream is = Files.newInputStream(filePath);
+                BufferedInputStream bis = new BufferedInputStream(is, 1024);
+                ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
             BufferedImage image = ImageIO.read(bis);
 
-            int height = image.getHeight()/(image.getWidth()/100);
-            BufferedImage preview = new BufferedImage(100,height,image.getType());
+            int height = image.getHeight() / (image.getWidth() / 100);
+            BufferedImage preview = new BufferedImage(100, height, image.getType());
             Graphics2D graphics2D = preview.createGraphics();
-            graphics2D.drawImage(image,0,0,100,height,null);
+            graphics2D.drawImage(image, 0, 0, 100, height, null);
             graphics2D.dispose();
 
-            ImageIO.write(preview,getExtensions(filePath.getFileName().toString()),baos);
+            ImageIO.write(preview, getExtensions(filePath.getFileName().toString()), baos);
             return baos.toByteArray();
         }
 
@@ -74,7 +74,7 @@ public class AvatarServiceImpl implements AvatarService {
 
     @Override
     public Avatar findAvatar(Long id) {
-        return avatarRepository.findByStudentId(id).orElse(new Avatar());
+        return avatarRepository.findByStudentId(id).orElseGet(Avatar::new);
     }
 
     private String getExtensions(String fileName) {
