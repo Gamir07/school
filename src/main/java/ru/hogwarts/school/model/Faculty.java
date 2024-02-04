@@ -1,10 +1,7 @@
 package ru.hogwarts.school.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.Collection;
@@ -15,13 +12,13 @@ import java.util.List;
 public class Faculty {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String name;
     private String color;
 
-    @OneToMany(mappedBy = "faculty")
+    @OneToMany(mappedBy = "faculty",cascade = CascadeType.ALL)
     @JsonIgnore
     private Collection<Student> studentList;
 
