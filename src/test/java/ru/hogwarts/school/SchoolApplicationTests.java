@@ -1,7 +1,5 @@
 package ru.hogwarts.school;
 
-import org.assertj.core.api.FactoryBasedNavigableIterableAssert;
-import org.hibernate.sql.ast.tree.expression.Collation;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +11,6 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import ru.hogwarts.school.controller.FacultyController;
 import ru.hogwarts.school.controller.StudentController;
 import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.model.Student;
