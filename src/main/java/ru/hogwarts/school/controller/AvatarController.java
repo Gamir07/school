@@ -3,7 +3,6 @@ package ru.hogwarts.school.controller;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -24,6 +23,7 @@ import java.nio.file.Path;
 @RequestMapping("avatar")
 @Transactional
 public class AvatarController {
+
     private AvatarService avatarService;
 
     @PostMapping(value = "/{studentId}/avatar", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
