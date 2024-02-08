@@ -15,4 +15,7 @@ public interface StudentService {
     Collection<Student> getAllStudents();
     Collection<Student> getStudentsByAgeBetween(int min, int max);
     Collection<Student> getStudentsByFaculty(String  name);
+    Integer getNumberOfStudents();
+    Integer getAverageAgeOfAllStudents();
+    Collection<Student> getLastFiveStudents();
 }
