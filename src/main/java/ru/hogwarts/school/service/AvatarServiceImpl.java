@@ -1,6 +1,8 @@
 package ru.hogwarts.school.service;
 
 import jakarta.transaction.Transactional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -12,11 +14,11 @@ import ru.hogwarts.school.repository.AvatarRepository;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.awt.print.Pageable;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Optional;
 
 import static java.nio.file.StandardOpenOption.CREATE_NEW;
 
@@ -26,6 +28,7 @@ public class AvatarServiceImpl implements AvatarService {
     @Value("${path.to.avatars.folder}")
     private String avatarsDir;
 
+    private final Logger logger = LoggerFactory.getLogger(StudentServiceImpl.class);
     private final AvatarRepository avatarRepository;
     private final StudentService service;
 
@@ -35,6 +38,7 @@ public class AvatarServiceImpl implements AvatarService {
     }
 
     public void uploadAvatar(Long studentId, MultipartFile avatarFile) throws IOException {
+        logger.info("Was invoked method to upload avatar with studentId = {}", studentId);
         Student student = service.getStudent(studentId);
         Path filePath = Path.of(avatarsDir, studentId + student.getName() + "." + getExtensions(avatarFile.getOriginalFilename()));
         Files.createDirectories(filePath.getParent());
@@ -77,13 +81,20 @@ public class AvatarServiceImpl implements AvatarService {
 
     @Override
     public List<Avatar> findAll(int pageNumber, int pageSize) {
+        logger.info("Was invoked method for finAllAvatars with pageNumber {} and pageSize {}", pageNumber, pageSize);
         PageRequest pageRequest = PageRequest.of(pageNumber - 1, pageSize);
         return avatarRepository.findAll(pageRequest).getContent();
     }
 
     @Override
     public Avatar findAvatar(Long id) {
-        return avatarRepository.findByStudentId(id).orElseGet(Avatar::new);
+        Optional<Avatar> avatar = avatarRepository.findByStudentId(id);
+        if (avatar.isEmpty()) {
+            logger.info("Was invoked method to create a new avatar fo studentId = {}", id);
+            return new Avatar();
+        }
+        logger.info("Was invoked method to findAvatar with id = {}", id);
+        return avatar.get();
     }
 
     private String getExtensions(String fileName) {
