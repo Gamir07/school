@@ -18,4 +18,6 @@ public interface StudentService {
     Integer getNumberOfStudents();
     Integer getAverageAgeOfAllStudents();
     Collection<Student> getLastFiveStudents();
+    Collection<String> getStudentsWithFirstLetterInName(Character letter);
+    Double getAverageAgeOfAllStudentsUsingStreams();
 }

@@ -14,5 +14,6 @@ public interface FacultyService {
     Faculty getFacultyByName(String name);
     Collection<Faculty> getAllFaculties();
     Faculty getFacultyByStudentId(Long id);
+    String getTheLongestFacultyName();
 
 }
