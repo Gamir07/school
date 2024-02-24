@@ -89,8 +89,56 @@ public class StudentController {
     }
 
     @GetMapping("/getAverageAgeOfAllStudentsUsingStreams")
-    public ResponseEntity<Integer> getAverageAgeOfAllStudentsUsingStreams(){
+    public ResponseEntity<Integer> getAverageAgeOfAllStudentsUsingStreams() {
         Double average = service.getAverageAgeOfAllStudentsUsingStreams();
         return ResponseEntity.ok((average.intValue()));
     }
+
+    @GetMapping("/print-parallel")
+    public void printParallel() {
+        printStudents(0);
+        printStudents(1);
+
+        new Thread(() -> {
+            printStudents(2);
+            printStudents(3);
+        }).start();
+
+        new Thread(() -> {
+            printStudents(4);
+            printStudents(5);
+        }).start();
+    }
+
+    @GetMapping("/print-synchronized")
+    public void printStudentsSynchronized() {
+        printStudentsWithSynchronizedBlock(0);
+        printStudentsWithSynchronizedBlock(1);
+
+        new Thread(() -> {
+            printStudentsWithSynchronizedBlock(2);
+            printStudentsWithSynchronizedBlock(3);
+        }).start();
+
+        new Thread(() -> {
+            printStudentsWithSynchronizedBlock(4);
+            printStudentsWithSynchronizedBlock(5);
+        }).start();
+    }
+
+    private void printStudents(int index) {
+        List<Student> studentList = service.getAllStudents().stream().toList();
+
+        System.out.println(Thread.currentThread().getName() + " " + studentList.get(index).getName());
+    }
+
+    private final Object lock = new Object();
+
+    private void printStudentsWithSynchronizedBlock(int index) {
+        List<Student> studentList = service.getAllStudents().stream().toList();
+        synchronized (lock) {
+            System.out.println(Thread.currentThread().getName() + " " + studentList.get(index).getName());
+        }
+    }
+
 }
