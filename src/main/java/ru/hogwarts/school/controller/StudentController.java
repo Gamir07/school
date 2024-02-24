@@ -6,6 +6,7 @@ import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.service.StudentService;
 
 import java.util.Collection;
+import java.util.List;
 
 @RestController
 @RequestMapping("/students")
@@ -82,5 +83,14 @@ public class StudentController {
         return ResponseEntity.ok(service.getLastFiveStudents());
     }
 
+    @GetMapping("/getStudentsWithFirstLetterInName/{letter}")
+    public ResponseEntity<Collection<String>> getStudentsWithFirstLetterInName(@PathVariable Character letter) {
+        return ResponseEntity.ok(service.getStudentsWithFirstLetterInName(letter));
+    }
 
+    @GetMapping("/getAverageAgeOfAllStudentsUsingStreams")
+    public ResponseEntity<Integer> getAverageAgeOfAllStudentsUsingStreams(){
+        Double average = service.getAverageAgeOfAllStudentsUsingStreams();
+        return ResponseEntity.ok((average.intValue()));
+    }
 }

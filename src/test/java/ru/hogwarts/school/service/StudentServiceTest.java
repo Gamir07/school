@@ -1,6 +1,5 @@
 package ru.hogwarts.school.service;
 
-import org.checkerframework.checker.units.qual.N;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -103,5 +102,20 @@ class StudentServiceTest {
         Mockito.verify(repository, Mockito.times(1)).findStudentsByFaculty(NAME);
     }
 
+    @Test
+    void shouldFindStudentsWithFirstLetterInName(){
+        char letter = 'm';
+        List<String> expectedList = List.of("Maria","Michael");
+        Mockito.when(repository.findAll()).thenReturn(studentList);
+        assertIterableEquals(expectedList, out.getStudentsWithFirstLetterInName(letter));
+    }
+
+    @Test
+    void shouldFindAverageAgeOfAllStudentsUsingStreams(){
+        int totalAge = STUDENT1.getAge() + STUDENT2.getAge()+STUDENT3.getAge()+ STUDENT4.getAge();
+        double averageAge = (double) (totalAge)/studentList.size();
+        Mockito.when(repository.findAll()).thenReturn(studentList);
+        assertEquals(averageAge,out.getAverageAgeOfAllStudentsUsingStreams());
+    }
 
 }

@@ -102,4 +102,17 @@ class FacultyServiceTest {
         Mockito.verify(repository, Mockito.times(1)).findFacultyByStudentId(id);
     }
 
+    @Test
+    void shouldFindTheLongestFacultyName(){
+        Faculty FACULTY1 = new Faculty(1L,"Gryffindor", "red");
+        Faculty FACULTY2 = new Faculty(2L,"Hufflepuff", "yellow");
+        Faculty FACULTY3 = new Faculty(3L,"Slytherin", "green");
+        Faculty FACULTY4 = new Faculty(4L,"Ravenclaw", "blue");
+        Faculty FACULTY5 = new Faculty(5L,"LongestFacultyName", "black");
+        List<Faculty> facultyList = List.of(FACULTY1,FACULTY2,FACULTY3,FACULTY4,FACULTY5);
+        String expectedName = FACULTY5.getName();
+        Mockito.when(repository.findAll()).thenReturn(facultyList);
+        assertEquals(expectedName,out.getTheLongestFacultyName());
+    }
+
 }

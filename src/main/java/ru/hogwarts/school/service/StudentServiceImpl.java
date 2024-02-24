@@ -8,8 +8,10 @@ import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.repository.StudentRepository;
 
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class StudentServiceImpl implements StudentService {
@@ -86,5 +88,23 @@ public class StudentServiceImpl implements StudentService {
         return repository.getLastFiveStudents();
     }
 
+    @Override
+    public List<String> getStudentsWithFirstLetterInName(Character letter) {
+        logger.info("Was invoked method for getStudentsWithFirstLetterInName = {}", letter);
+        return repository.findAll()
+                .stream()
+                .filter(st -> st.getName().startsWith(letter.toString().toUpperCase()))
+                .sorted(Comparator.comparing(st->st.getName().toUpperCase()))
+                .map(Student::getName)
+                .toList();
+    }
 
+    @Override
+    public Double getAverageAgeOfAllStudentsUsingStreams() {
+        logger.info("Was invoked method for getAverageAgeOfAllStudentsUsingStreams");
+        return repository.findAll()
+                .stream()
+                .mapToInt(Student::getAge)
+                .average().getAsDouble();
+    }
 }
